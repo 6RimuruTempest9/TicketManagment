@@ -1,0 +1,75 @@
+﻿@model UpdateEventViewModel
+@inject IViewLocalizer Localizer
+
+@{
+    var venueService = Context.RequestServices.GetService<IServiceAsync<Venue>>();
+    var layoutService = Context.RequestServices.GetService<IServiceAsync<Layout>>();
+    var areaService = Context.RequestServices.GetService<IServiceAsync<Area>>();
+    var seatService = Context.RequestServices.GetService<IServiceAsync<Seat>>();
+
+    var venues = await venueService.GetAll().ToListAsync();
+    var layouts = await layoutService.GetAll().ToListAsync();
+    var areas = await areaService.GetAll().ToListAsync();
+    var seats = await seatService.GetAll().ToListAsync();
+
+    var currentLayout = await layoutService.GetByIdAsync(Model.LayoutId);
+    var currentVenue = await venueService.GetByIdAsync(currentLayout.VenueId);
+}
+
+<form asp-controller="Event" asp-action="Update" method="post">
+    <div>
+        <lable>@Localizer["Select layout"]</lable>
+        <br />
+        <select name="LayoutId">
+            <optgroup label="Current venue -> @currentVenue.Address">
+                <option value="@currentLayout.Id">@currentLayout.Description</option>
+            </optgroup>
+            @foreach (var venue in venues)
+            {
+                @if (CreateEventViewModel.HasAnySeats(venue, layouts, areas, seats))
+                {
+                    <optgroup label="@venue.Address">
+                        @{
+                            var availableLayouts = layouts.Where(layout => layout.VenueId == venue.Id);
+                        }
+                        @foreach (var layout in availableLayouts)
+                        {
+                            if (CreateEventViewModel.HasAnySeats(layout, areas, seats))
+                            {
+                                <option value="@layout.Id">@layout.Description</option>
+                            }
+                        }
+                    </optgroup>
+                }
+            }
+        </select>
+    </div>
+    <div>
+        <label asp-for="Name">@Localizer["Name"]</label>
+        <br />
+        <input asp-for="Name" />
+    </div>
+    <div>
+        <label asp-for="Description">@Localizer["Description"]</label>
+        <br />
+        <input asp-for="Description" />
+    </div>
+    <div>
+        <label asp-for="StartDate">@Localizer["Start date"]</label>
+        <br />
+        <input asp-for="StartDate" />
+    </div>
+    <div>
+        <label asp-for="EndDate">@Localizer["End date"]</label>
+        <br />
+        <input asp-for="EndDate" />
+    </div>
+    <div>
+        <label asp-for="ImageUrl">@Localizer["Image Url"]</label>
+        <br />
+        <input asp-for="ImageUrl" />
+    </div>
+    <div>
+        <input type="submit" value="@Localizer["Update event"].Value" />
+    </div>
+</form>

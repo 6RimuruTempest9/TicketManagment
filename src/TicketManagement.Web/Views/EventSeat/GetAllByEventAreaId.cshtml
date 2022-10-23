@@ -1,0 +1,47 @@
+﻿@model IEnumerable<EventSeatModel>
+@inject IViewLocalizer Localizer
+
+@{
+    var isAuthenticated = Context.Session.Keys.Contains("JWT");
+}
+
+<form method="post" asp-action="BuyTickets" asp-controller="Purchase">
+    <div style="display: none">
+        <input type="number" name="ticketPrice" value="@Model.First().TicketPrice" />
+    </div>
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>@Localizer["Row"]</th>
+                    <th>@Localizer["Number"]</th>
+                    <th>@Localizer["Buy"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var eventSeatModel in Model)
+                {
+                    <tr>
+                        <td>@eventSeatModel.Row</td>
+                        <td>@eventSeatModel.Number</td>
+                        <td>
+                            @if (eventSeatModel.State == TicketManagement.Web.Models.EventSeatState.Free)
+                            {
+                                @Html.CheckBox("EventSeatIds", false, new
+                                {
+                                    @value = eventSeatModel.Id
+                                });
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (isAuthenticated)
+    {
+        <div>
+            <input type="submit" value="@Localizer["Buy"].Value" />
+        </div>
+    }
+</form>

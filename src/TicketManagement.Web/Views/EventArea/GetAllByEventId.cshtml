@@ -1,0 +1,32 @@
+﻿@model IEnumerable<EventAreaModel>
+@inject IViewLocalizer Localizer
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Localizer["Description"]</th>
+            <th>@Localizer["Coord X"]</th>
+            <th>@Localizer["Coord Y"]</th>
+            <th>@Localizer["Price"]</th>
+            <th>@Localizer["More info"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var eventAreaModel in Model)
+        {
+            <tr>
+                <td>@eventAreaModel.Description</td>
+                <td>@eventAreaModel.CoordX</td>
+                <td>@eventAreaModel.CoordY</td>
+                <td>@eventAreaModel.Price</td>
+                <td>
+                    @Html.ActionLink(@Localizer["Show"].Value, "GetAllByEventAreaId", "EventSeat", new
+                    {
+                        eventAreaId = @eventAreaModel.Id,
+                        ticketPrice = @eventAreaModel.Price,
+                    })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

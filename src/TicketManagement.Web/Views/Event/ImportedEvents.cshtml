@@ -1,0 +1,38 @@
+﻿@model IEnumerable<ThirdPartyEvent>
+@inject IViewLocalizer Localizer
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Localizer["Name"]</th>
+            <th>@Localizer["Start date"]</th>
+            <th>@Localizer["End date"]</th>
+            <th>@Localizer["Description"]</th>
+            <th>@Localizer["Poster"]</th>
+            <th>@Localizer["Options"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var thirdPartyEvent in Model)
+        {
+            <tr>
+                <td>@thirdPartyEvent.Name</td>
+                <td>@thirdPartyEvent.StartDate</td>
+                <td>@thirdPartyEvent.EndDate</td>
+                <td>@thirdPartyEvent.Description</td>
+                <td>
+                    <img src="data:image/png;base64,@thirdPartyEvent.PosterImageBase64" alt="@Localizer["No image"].Value" />
+                </td>
+                <td>
+                    @Html.ActionLink(@Localizer["Add event"].Value, "ImportedEvent", "Event", new
+                    {
+                        Name = thirdPartyEvent.Name,
+                        StartDate = thirdPartyEvent.StartDate,
+                        EndDate = thirdPartyEvent.EndDate,
+                        Description = thirdPartyEvent.Description,
+                    })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

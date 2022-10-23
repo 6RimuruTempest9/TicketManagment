@@ -1,0 +1,3 @@
+{
+  "urls": "#{TicketManagement.UserApi base URL}"
+}

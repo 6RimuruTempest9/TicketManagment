@@ -1,0 +1,67 @@
+#on:
+#  push:
+#    branches: [ master, task-6 ]
+#  pull_request:
+#    branches: [ master ]
+
+#jobs:
+  
+#  build:
+    
+#    runs-on: self-hosted
+
+#    steps:
+    
+#    - uses: actions/checkout@v2
+
+#    # install the Octopus CLI
+#    - name: Install Octopus CLI
+#      uses: OctopusDeploy/install-octopus-cli-action@v1.2.0
+#      with:
+#        version: '*'
+    
+#    - name: Install dependencies
+#      run: dotnet restore
+#    - name: Build
+#      run: dotnet build --configuration Release --no-restore
+#    - name: Test
+#      run: dotnet test --no-restore --verbosity normal
+
+#    # dotnet publish
+#    - name: Publish TicketManagement.UserApi
+#      run: dotnet publish ${{ github.workspace }}\src\TicketManagement.UserApi\TicketManagement.UserApi.csproj --configuration Release --output ${{ github.workspace }}\output\TicketManagement.UserApi
+#    - name: Publish TicketManagement.EventManager
+#      run: dotnet publish ${{ github.workspace }}\src\TicketManagement.EventManagerApi\TicketManagement.EventManagerApi.csproj --configuration Release --output ${{ github.workspace }}\output\TicketManagement.EventManagerApi
+#    - name: Publish TicketManagement.Web
+#      run: dotnet publish ${{ github.workspace }}\src\TicketManagement.Web\TicketManagement.Web.csproj --configuration Release --output ${{ github.workspace }}\output\TicketManagement.Web
+#    - name: Publish TicketManagement.ReactWeb
+#      run: dotnet publish ${{ github.workspace }}\src\TicketManagement.ReactWeb\TicketManagement.ReactWeb.csproj --configuration Release --output ${{ github.workspace }}\output\TicketManagement.ReactWeb
+      
+#    # Pack the files into a zip
+#    - name: Package TicketManagement.UserApi
+#      run: octo pack --id=TicketManagement.UserApi --format=Zip --version=1.7.${{ github.run_number }} --basePath=${{ github.workspace }}\output\TicketManagement.UserApi\ --outFolder=${{ github.workspace }}\output
+#    - name: Package TicketManagement.EventManagerApi
+#      run: octo pack --id=TicketManagement.EventManagerApi --format=Zip --version=1.7.${{ github.run_number }} --basePath=${{ github.workspace }}\output\TicketManagement.EventManagerApi\ --outFolder=${{ github.workspace }}\output
+#    - name: Package TicketManagement.Web
+#      run: octo pack --id=TicketManagement.Web --format=Zip --version=1.7.${{ github.run_number }} --basePath=${{ github.workspace }}\output\TicketManagement.Web\ --outFolder=${{ github.workspace }}\output
+#    - name: Package TicketManagement.ReactWeb
+#      run: octo pack --id=TicketManagement.ReactWeb --format=Zip --version=1.7.${{ github.run_number }} --basePath=${{ github.workspace }}\output\TicketManagement.ReactWeb\ --outFolder=${{ github.workspace }}\output
+
+#    # Push the zip to the server
+#    - name: Push TicketManagement.UserApi
+#      run: octo push --package="${{ github.workspace }}\output\TicketManagement.UserApi.1.7.${{ github.run_number }}.zip" --server="http://localhost:80/" --apiKey="API-GQY6HGDYYYXYFRJHHKHAH7HCTGJTAGOF"
+#    - name: Push TicketManagement.EventManagerApi
+#      run: octo push --package="${{ github.workspace }}\output\TicketManagement.EventManagerApi.1.7.${{ github.run_number }}.zip" --server="http://localhost:80/" --apiKey="API-GQY6HGDYYYXYFRJHHKHAH7HCTGJTAGOF"
+#    - name: Push TicketManagement.Web
+#      run: octo push --package="${{ github.workspace }}\output\TicketManagement.Web.1.7.${{ github.run_number }}.zip" --server="http://localhost:80/" --apiKey="API-GQY6HGDYYYXYFRJHHKHAH7HCTGJTAGOF"
+#    - name: Push TicketManagement.ReactWeb
+#      run: octo push --package="${{ github.workspace }}\output\TicketManagement.ReactWeb.1.7.${{ github.run_number }}.zip" --server="http://localhost:80/" --apiKey="API-GQY6HGDYYYXYFRJHHKHAH7HCTGJTAGOF"
+
+#    # Create a release
+#    - name: Create a Release in Octopus
+#      uses: OctopusDeploy/create-release-action@v1.1.1
+#      with:
+#        api_key: "API-GQY6HGDYYYXYFRJHHKHAH7HCTGJTAGOF"
+#        project: "TicketManagement"
+#        server: "http://localhost:80/"
+#        version: 1.7.${{ github.run_number }}

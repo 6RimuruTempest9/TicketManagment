@@ -1,0 +1,12 @@
+﻿@model AddBalanceViewModel
+@inject IViewLocalizer Localizer
+
+<form method="post" asp-controller="User" asp-action="AddBalance">
+    <div>
+        <label asp-for="AdditionalBalance">@Localizer["Additional balance"]</label><br />
+        <input asp-for="AdditionalBalance" />
+    </div>
+    <div>
+        <input type="submit" value="@Localizer["Add"].Value" />
+    </div>
+</form>

@@ -1,0 +1,71 @@
+﻿@model UserModel
+@inject IViewLocalizer Localizer
+
+@{
+    ViewBag.Title = @Localizer["Edit"].Value;
+
+    var languages = new[]
+    {
+        "Russian",
+        "English",
+        "Belarussian",
+    };
+
+    var timeZoneOptionalLabel = @Localizer["Select time zone"].Value;
+}
+
+
+<div asp-validation-summary="All"></div>
+<form method="post" asp-controller="User" asp-action="Edit">
+    <div style="display: none">
+        <input asp-for="Balance" hidden />
+        <input asp-for="Id" hidden />
+    </div>
+    <table class=".table-borderless">
+        <tbody>
+            <tr>
+                <td>@Localizer["First name"]</td>
+                <td><input asp-for="FirstName" /></td>
+            </tr>
+            <tr>
+                <td>@Localizer["Last name"]</td>
+                <td><input asp-for="LastName" /></td>
+            </tr>
+            <tr>
+                <td>@Localizer["Email"]</td>
+                <td><input asp-for="Email" /></td>
+            </tr>
+            <tr>
+                <td>@Localizer["Language"]</td>
+                <td>
+                    <select name="Language">
+                        @foreach (var language in languages)
+                        {
+                            @if (Model != null && @language == Model.Language)
+                            {
+                                <option selected value="@language">@Localizer[language]</option>
+                            }
+                            else
+                            {
+                                <option value="@language">@Localizer[language]</option>
+                            }
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>@Localizer["Time zone"]</td>
+                <td>
+                    @Html.DropDownList("TimeZone",
+                        new SelectList(TimeZoneInfo.GetSystemTimeZones()),
+                        timeZoneOptionalLabel,
+                        null);
+                </td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="@Localizer["Edit"].Value" /></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</form>

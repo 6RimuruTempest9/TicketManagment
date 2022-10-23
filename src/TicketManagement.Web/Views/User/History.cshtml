@@ -1,0 +1,20 @@
+﻿@model IEnumerable<PurchaseViewModel>
+@inject IViewLocalizer Localizer
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Localizer["Time"]</th>
+            <th>@Localizer["Amount"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var purchase in @Model)
+        {
+            <tr>
+                <td>@purchase.Time</td>
+                <td>@purchase.Amount</td>
+            </tr>
+        }
+    </tbody>
+</table>

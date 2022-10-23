@@ -1,0 +1,65 @@
+﻿@model RegisterViewModel
+@inject IViewLocalizer Localizer
+
+@{
+    ViewBag.Title = Localizer["Registration"].Value;
+
+    var languages = new[]
+    {
+        "Russian",
+        "English",
+        "Belarussian",
+    };
+
+    var timeZoneOptionalLabel = Localizer["Select time zone"].Value;
+}
+
+<form method="post" asp-action="Register">
+
+    <div>
+        <label asp-for="FirstName">@Localizer["First name"]</label><br />
+        <input asp-for="FirstName" />
+    </div>
+
+    <div>
+        <label asp-for="LastName">@Localizer["Last name"]</label><br />
+        <input asp-for="LastName" />
+    </div>
+
+    <div>
+        <label asp-for="Email">@Localizer["Email"]</label><br />
+        <input asp-for="Email" />
+    </div>
+
+    <div>
+        <label asp-for="Password">@Localizer["Password"]</label><br />
+        <input asp-for="Password" />
+    </div>
+
+    <div>
+        <label asp-for="PasswordConfirm">@Localizer["Password confirm"]</label><br />
+        <input asp-for="PasswordConfirm" />
+    </div>
+
+    <div>
+        <label asp-for="Language">@Localizer["Language"]</label><br />
+        <select name="Language">
+            @foreach (var language in languages)
+            {
+                <option value="@language">@Localizer[language]</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label asp-for="TimeZone">@Localizer["Time zone"]</label><br />
+        @Html.DropDownList("TimeZone",
+            new SelectList(TimeZoneInfo.GetSystemTimeZones()),
+            timeZoneOptionalLabel,
+            null);
+    </div>
+
+    <div>
+        <input type="submit" value="@Localizer["Register"].Value" />
+    </div>
+</form>

@@ -1,0 +1,84 @@
+﻿@model IEnumerable<EventModel>
+@inject IViewLocalizer Localizer
+
+@{
+    var roles = default(IEnumerable<string>);
+
+    var userIsAdmin = false;
+    var userIsManager = false;
+
+    if (Context.Items.ContainsKey("UserRoles"))
+    {
+        roles = (IEnumerable<string>)Context.Items["UserRoles"];
+
+        userIsAdmin = roles.Contains("Admin");
+        userIsManager = roles.Contains("Manager");
+    }
+}
+
+@if (@userIsAdmin)
+{
+    <div>
+        <a class="nav-link text-dark" asp-area="" asp-controller="Event" asp-action="Create">@Localizer["Create event"]</a>
+    </div>
+    <div>
+        @Html.ActionLink(@Localizer["Load events from json"].Value, "LoadThirdPartyEventsFromJson", "Event", null, new
+        {
+            @class = "nav-link text-dark",
+        })
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Localizer["Name"]</th>
+            <th>@Localizer["Description"]</th>
+            <th>@Localizer["Start date"]</th>
+            <th>@Localizer["End date"]</th>
+            <th>@Localizer["Image"]</th>
+            <th>@Localizer["More info"]</th>
+            @if (@userIsManager || @userIsAdmin)
+            {
+                <th>@Localizer["Options"]</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var eventModel in Model)
+        {
+            <tr>
+                <td>@eventModel.Name</td>
+                <td>@eventModel.Description</td>
+                <td>@eventModel.StartDate</td>
+                <td>@eventModel.EndDate</td>
+                <td>
+                    <img alt="@Localizer["No image"].Value" src="@eventModel.ImageUrl" style="max-height: 200px; max-width: 200px;" asp-append-version="true" />
+                </td>
+                <td>
+                    @Html.ActionLink(@Localizer["Show"].Value, "GetAllByEventId", "EventArea", new { eventId = @eventModel.Id })
+                </td>
+                @if (@userIsManager || @userIsAdmin)
+                {
+                    <td>
+                        @Html.ActionLink(@Localizer["Edit"].Value, "Update", "Event", new
+                        {
+                            id = eventModel.Id,
+                            LayoutId = eventModel.LayoutId,
+                            Name = eventModel.Name,
+                            Description = eventModel.Description,
+                            StartDate = eventModel.StartDate,
+                            EndDate = eventModel.EndDate,
+                            ImageUrl = eventModel.ImageUrl,
+                        })
+                        <br />
+                        @Html.ActionLink(@Localizer["Delete"].Value, "Delete", "Event", new
+                        {
+                            id = eventModel.Id,
+                        })
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

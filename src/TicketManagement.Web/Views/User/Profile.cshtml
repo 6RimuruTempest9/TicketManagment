@@ -1,0 +1,31 @@
+﻿@model UserModel
+@inject IViewLocalizer Localizer
+
+@{
+    ViewBag.Title = @Localizer["Profile"].Value;
+}
+
+<table class=".table-borderless">
+    <tbody>
+        <tr>
+            <td>
+                @Localizer["Balance"]: @Model.Balance
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="AddBalance">@Localizer["Add balance"]</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Edit">@Localizer["Edit profile"]</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="ChangePassword">@Localizer["Change password"]</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
